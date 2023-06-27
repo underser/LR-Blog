@@ -11,7 +11,6 @@
                           enctype='multipart/form-data'
                     >
                         @csrf
-                        @method('PATCH')
                         <div class="row g-3 mb-2">
                             <div class="col-sm-6">
                                 <label for="name" class="form-label">Name</label>
