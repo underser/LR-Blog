@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::permanentRedirect('/home', '/');
+Route::permanentRedirect('/home', '/articles');
+Route::redirect('/', '/articles');
+Route::resource('articles', ArticleController::class);
