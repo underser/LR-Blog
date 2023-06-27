@@ -24,7 +24,10 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view('articles.create');
+        return view('articles.create', [
+            'categories' => Category::all(),
+            'tags' => Tag::all()
+        ]);
     }
 
     /**
