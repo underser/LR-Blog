@@ -4,9 +4,9 @@
             <div class="row g-5">
                 <div class="col-md-10 col-lg-12">
                     <h4 class="mb-3">You're editing <b>{{ $article->name }}</b></h4>
-                    <form class="needs-validation"
+                    <form class="needs-validation @if ($errors->any()) was-validated @endif"
                           novalidate
-                          method="post"
+                          method="POST"
                           action="{{ route('articles.update', $article) }}"
                           enctype='multipart/form-data'
                     >
@@ -15,7 +15,7 @@
                         <div class="row g-3 mb-2">
                             <div class="col-sm-6">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Name" value="{{ $article->name }}" required="">
+                                <input type="text" class="form-control" id="name" placeholder="Name" name="name" value="{{ old('name', $article->name) }}" required="">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -24,7 +24,10 @@
                         <div class="row g-3 mb-2">
                             <div class="col-sm-6">
                                 <label for="image" class="form-label">Image</label>
-                                <input type="file" class="form-control" id="image" value="{{ $article->image }}" required="">
+                                <input type="file" class="form-control" id="image" name="image" value="{{ old('image', $article->image) }}">
+                                @if($article->image)
+                                    <img src="{{ asset($article->image) }}" alt="{{ $article->name }}" width="300" class="pb-2 pt-1">
+                                @endif
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -33,17 +36,17 @@
                         <div class="row g-3 mb-2">
                             <div class="col-md-6">
                                 <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" required="">
+                                <select class="form-select" id="category" required="" name="category_id">
                                     <option value="">Choose...</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}"
-                                            @selected($article->category->id === $category->id)
+                                            @selected($article->category->id == old('category', $category->id))
                                         >
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('category')
+                                @error('category_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -51,17 +54,17 @@
                         <div class="row g-3 mb-2">
                             <div class="col-md-6">
                                 <label for="tags" class="form-label">Tags</label>
-                                <select class="form-select" id="tags" required="" multiple>
+                                <select class="form-select" id="tags" required="" multiple name="tags[]">
                                     <option value="">Choose...</option>
                                     @foreach($tags as $tag)
                                         <option value="{{ $tag->id }}"
-                                            @selected($article->tag?->id === $tag->id)
+                                            @selected(in_array($tag->id, $article->tags->pluck('id')->toArray() ?? []) )
                                         >
                                             {{ ucfirst($tag->name) }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('tag')
+                                @error('tags')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -69,7 +72,10 @@
                         <div class="row g-3 mb-2">
                             <div class="col-sm-6">
                                 <label for="full_text" class="form-label">Body</label>
-                                <textarea class="form-control" id="full_text" name="full_text">{!! $article->full_text !!}</textarea>
+                                <textarea class="form-control" id="full_text" required name="full_text">{!! old('full_text', $article->full_text) !!}</textarea>
+                                @error('full_text')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row g-3 mb-2">

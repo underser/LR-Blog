@@ -44,6 +44,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function isAdmin(): bool
+    {
+        return $this->email === config('app.admin.email');
+    }
+
     public function articles(): HasMany
     {
         return $this->hasMany(Article::class);

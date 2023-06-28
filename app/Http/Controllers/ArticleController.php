@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Articles\Store;
+use App\Http\Requests\Articles\Update;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Article::class, request: 'articles');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,9 +40,19 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Store $request): RedirectResponse
     {
-        //
+        /** @var Article $article */
+        $article = Article::factory()->create($request->safe()->except(['tags', 'image']));
+        $article->tags()->attach($request->validated('tags'));
+        if ($image = $request->file('image')) {
+            $article->storeImage($image);
+            $article->save();
+        }
+
+        return to_route('articles.show', [
+            'article' => $article
+        ]);
     }
 
     /**
@@ -63,16 +80,26 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(Update $request, Article $article)
     {
-        //
+        $article->update($request->safe()->except('tags', 'image'));
+        $article->tags()->attach($request->validated('tags'));
+
+        if ($image = $request->file('image')) {
+            $article->storeImage($image);
+            $article->save();
+        }
+
+        return to_route('articles.show', $article);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy(Article $article): RedirectResponse
     {
-        //
+        $article->delete();
+
+        return to_route('articles.index');
     }
 }
