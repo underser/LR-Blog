@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Articles\Store;
+use App\Http\Requests\Articles\Update;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
@@ -9,6 +11,11 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Article::class, request: 'articles');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,9 +40,24 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Store $request)
     {
-        //
+        $articleData = $request->safe()->except(['tags']);
+
+        if ($image = $request->file('image')) {
+            $articleData['image'] = $image->storePubliclyAs(
+                'article/' . $request->user()->id . '/images',
+                $image->hashName()
+            );
+        }
+
+        /** @var Article $article */
+        $article = Article::factory()->create($articleData);
+        $article->tags()->attach($request->validated('tags'));
+
+        return to_route('articles.show', [
+            'article' => $article
+        ]);
     }
 
     /**
@@ -63,7 +85,7 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(Update $request, Article $article)
     {
         //
     }
