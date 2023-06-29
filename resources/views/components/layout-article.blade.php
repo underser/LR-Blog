@@ -54,6 +54,11 @@
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
+                                    @if (Auth::user()->isAdmin())
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                            {{ __('Dashboard') }}
+                                        </a>
+                                    @endif
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
