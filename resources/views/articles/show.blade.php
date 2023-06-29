@@ -10,7 +10,7 @@
                             <form action="{{ route('tags.update', $tag) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <input type="text" class="form-control" placeholder="Name" name="name" value="{{ old('name', $tag->name) }}" required="">
+                                <x-forms.input placeholder="Name" name="name" value="{{ old('name', $tag->name) }}"/>
                                 @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -24,7 +24,7 @@
                                 <form action="{{ route('tags.destroy', $tag) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-close py-0 px-0"></button>
+                                    <x-forms.button-close/>
                                 </form>
                             </span>
                         @endcan
@@ -33,7 +33,7 @@
                 @can('create', \App\Models\Tag::class)
                     <form action="{{ route('tags.store', ['article' => $article]) }}" method="POST">
                         @csrf
-                        <input type="text" class="form-control" placeholder="New tag" name="name" value="{{ old('name') }}" required="">
+                        <x-forms.input placeholder="New Tag" name="name" value="{{ old('name') }}"/>
                         @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

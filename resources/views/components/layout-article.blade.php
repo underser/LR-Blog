@@ -48,6 +48,14 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
+                                @if (Auth::user()->isAdmin())
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                            {{ __('Dashboard') }}
+                                        </a>
+                                    </div>
+
+                                @endif
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
