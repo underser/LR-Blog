@@ -83,7 +83,7 @@ class ArticleController extends Controller
     public function update(Update $request, Article $article)
     {
         $article->update($request->safe()->except('tags', 'image'));
-        $article->tags()->attach($request->validated('tags'));
+        $article->tags()->sync($request->validated('tags'));
 
         if ($image = $request->file('image')) {
             $article->storeImage($image);
