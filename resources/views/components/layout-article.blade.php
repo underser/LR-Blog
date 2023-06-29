@@ -48,20 +48,17 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                @if (Auth::user()->isAdmin())
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
-                                            {{ __('Dashboard') }}
-                                        </a>
-                                    </div>
-
-                                @endif
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
+                                    @if (Auth::user()->isAdmin())
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                            {{ __('Dashboard') }}
+                                        </a>
+                                    @endif
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
