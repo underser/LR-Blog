@@ -12,6 +12,8 @@ Auth::routes(['register' => false]);
 Route::permanentRedirect('/home', '/articles');
 Route::redirect('/', '/articles');
 
+Route::view('about-me', 'pages/about-me')->name('about-me');
+
 Route::get('dashboard', DashboardController::class)->name('dashboard')->middleware(['auth']);
 
 Route::resource('articles', ArticleController::class);
