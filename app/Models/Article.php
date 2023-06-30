@@ -32,8 +32,11 @@ class Article extends Model
      */
     public function storeImage(UploadedFile $file, array $types = ['main', 'thumbnail']): void
     {
-        /** @TODO Remove old image if exists */
+        $basePath = 'article/' . $this->id . '/images';
         if (in_array('main', $types)) {
+
+            $this->deleteSavedImages($basePath);
+
              $this->image = $file->storePubliclyAs(
                 'article/' . $this->id . '/images/main',
                 $file->hashName(),
@@ -42,11 +45,36 @@ class Article extends Model
         }
 
         if (in_array('thumbnail', $types)) {
-            Storage::disk('public')->makeDirectory('article/' . $this->id . '/images/thumbnail');
+
+            $this->deleteSavedImages($basePath, 'thumbnail');
+
+            Storage::disk('public')->makeDirectory($basePath . '/thumbnail');
             Image::make($file)->resize(32, 32)->save(
-                storage_path('app/public/article/' . $this->id . '/images/thumbnail/') . $file->hashName()
+                storage_path('app/public/' . $basePath . '/thumbnail/') . $file->hashName()
             );
         }
+    }
+
+    /**
+     * Provides image urls.
+     * Available types: main and thumbnail
+     *
+     * @param string $imageType
+     *
+     * @return string
+     */
+    public function getImageUrl(string $imageType = 'main'): string
+    {
+        $result = '';
+
+        if ($this->image) {
+            $result = match($imageType) {
+                'main' => $this->image,
+                'thumbnail' => str_replace('main', 'thumbnail', $this->image)
+            };
+        }
+
+        return $result;
     }
 
     public function user(): BelongsTo
@@ -62,5 +90,10 @@ class Article extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    private function deleteSavedImages(string $path, string $imageType = 'main'): void
+    {
+        Storage::disk('public')->deleteDirectory($path . '/' . $imageType);
     }
 }

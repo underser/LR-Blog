@@ -14,7 +14,11 @@
 
                     </div>
                     <div class="d-flex gap-2 w-100 justify-content-between">
-                        <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        @if($imageUrl = $article->getImageUrl('thumbnail'))
+                            <img src="{{ asset($imageUrl) }}" alt="{{ $article->name }}" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        @else
+                            <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                        @endif
                         <div class="d-flex gap-2 w-100 justify-content-between">
                             <div>
                                 <h6 class="mb-0">{{ $article->name }}</h6>

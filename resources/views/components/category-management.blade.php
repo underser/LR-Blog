@@ -1,7 +1,7 @@
 <div class="my-2 d-flex flex-wrap">
     <h2 class="w-100 mb-3">Category Management</h2>
     @foreach($categories as $category)
-        <div class="btn btn-primary me-2 mb-2 position-relative">
+        <div class="me-3 mb-3 position-relative btn btn-outline-secondary">
             @can('update', $category)
                 <form action="{{ route('categories.update', $category) }}" method="POST">
                     @csrf
@@ -15,13 +15,13 @@
 
             @can('delete', $category)
                 <small>Articles assigned: {{ $category->articles_count }}</small>
-                <span class="position-absolute top-0 start-100 translate-middle px-1 bg-danger border border-light rounded-circle">
-                    <form action="{{ route('categories.destroy', $category) }}" method="POST">
+                <div class="position-absolute top-0 start-100 px-1 py-1 translate-middle bg-light rounded-pill rounded-circle">
+                    <form action="{{ route('categories.destroy', $category) }}" method="POST" style="line-height: 0">
                         @csrf
                         @method('DELETE')
                         <x-forms.button-close/>
                     </form>
-                </span>
+                </div>
             @endcan
         </div>
     @endforeach
