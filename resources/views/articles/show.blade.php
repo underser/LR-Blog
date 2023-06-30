@@ -5,7 +5,7 @@
             <p class="blog-post-meta">{{ $article->created_at->format('M d Y') }} <small>{{ $article->user->name }}</small></p>
             <div class="my-2 d-flex">
                 @foreach($article->tags as $tag)
-                    <div class="btn btn-primary position-relative me-2">
+                    <div class="position-relative me-3 @if(!auth()->user()?->can('delete', $tag)) btn btn-info @endif">
                         @can('update', $tag)
                             <form action="{{ route('tags.update', $tag) }}" method="POST">
                                 @csrf
@@ -20,13 +20,13 @@
                         @endcan
 
                         @can('delete', $tag)
-                            <span class="position-absolute top-0 start-100 translate-middle px-1 bg-danger border border-light rounded-circle">
-                                <form action="{{ route('tags.destroy', $tag) }}" method="POST">
+                            <div class="position-absolute top-0 start-100 px-1 py-1 translate-middle bg-light rounded-pill rounded-circle">
+                                <form action="{{ route('tags.destroy', $tag) }}" method="POST" style="line-height: 0">
                                     @csrf
                                     @method('DELETE')
                                     <x-forms.button-close/>
                                 </form>
-                            </span>
+                            </div>
                         @endcan
                     </div>
                 @endforeach
@@ -41,7 +41,7 @@
                 @endcan
             </div>
             @if($article->image)
-                <img src="{{ asset($article->image) }}" alt="{{ $article->name }}" class="img-fluid">
+                <img src="{{ asset($article->getImageUrl()) }}" alt="{{ $article->name }}" class="img-fluid">
             @endif
             <article>
                 {!! $article->full_text !!}
