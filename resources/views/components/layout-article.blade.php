@@ -16,7 +16,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -71,9 +71,16 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="container">
             {{ $slot }}
         </main>
-    </div>
+        </div>
+        <footer class="py-5 text-center text-body-secondary bg-body-secondary mt-auto">
+            <p>Blog Laravel App by <a href="{{ route('about-me') }}">Roman</a>.</p>
+            <p class="mb-0">
+                <a href="https://www.linkedin.com/in/underser/">Linkedin</a>
+            </p>
+        </footer>
+
     </body>
 </html>
