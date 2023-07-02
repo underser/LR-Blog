@@ -12,9 +12,10 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Store $request): RedirectResponse
+    public function store(Store $request, Category $category): RedirectResponse
     {
-        Category::factory()->create($request->validated());
+        $this->authorize('create', $category);
+        $category::factory()->create($request->validated());
 
         return back();
     }
@@ -24,6 +25,7 @@ class CategoryController extends Controller
      */
     public function update(Update $request, Category $category)
     {
+        $this->authorize('update', $category);
         $category->update($request->validated());
 
         return back();
@@ -34,6 +36,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
+        $this->authorize('delete', $category);
         $category->delete();
 
         return back();
