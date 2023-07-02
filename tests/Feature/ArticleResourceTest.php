@@ -162,7 +162,7 @@ class ArticleResourceTest extends TestCase
 
         $oldImageUrl = $this->articleOne->getImageUrl();
 
-        $response = $this->actingAs($this->adminUser)->patch(
+        $response = $this->actingAs($this->adminUser)->put(
             route('articles.update', $this->articleOne),
             [
                 'name' => $nameUpdated,
@@ -191,7 +191,7 @@ class ArticleResourceTest extends TestCase
     /** @test */
     public function not_admin_user_cant_update_article()
     {
-        $response = $this->actingAs(User::factory()->create())->patch(
+        $response = $this->actingAs(User::factory()->create())->put(
             route('articles.update', $this->articleOne),
             [
                 'name' => 'New name',
