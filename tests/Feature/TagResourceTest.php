@@ -27,6 +27,10 @@ class TagResourceTest extends TestCase
     {
         parent::setUp();
 
+        putenv('APP_ADMIN_USERNAME=admin');
+        putenv('APP_ADMIN_EMAIL=domain@ex.com');
+        putenv('APP_ADMIN_PASSWORD=BGxNWZ4wyF8Rs.vQmu7j');
+
         $this->adminUser = User::factory()->create([
             'name' => config('app.admin.name'),
             'email' => config('app.admin.email'),
