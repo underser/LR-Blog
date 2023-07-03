@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-Route::permanentRedirect('/home', '/articles');
+Route::permanentRedirect('/home', '/articles')->name('home');
 Route::redirect('/', '/articles');
 
 Route::view('about-me', 'pages/about-me')->name('about-me');
 
-Route::get('dashboard', DashboardController::class)->name('dashboard')->middleware(['auth']);
+Route::get('dashboard', DashboardController::class)->name('dashboard')->middleware(['isAdmin']);
 
 Route::resource('articles', ArticleController::class);
 
