@@ -48,7 +48,7 @@
             </article>
         </article>
     </div>
-    @auth
+    @can(['delete', 'update'], $article)
         <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-left justify-content-left">
             <div class="container-sm d-flex">
                 <a href="{{ route('articles.edit', $article) }}" class="btn btn-primary rounded-pill px-3">Edit</a>
@@ -59,5 +59,5 @@
                 </form>
             </div>
         </div>
-    @endauth
+    @endcan
 </x-layout-article>
